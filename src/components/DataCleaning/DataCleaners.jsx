@@ -1,0 +1,258 @@
+import React from "react";
+
+export function ScientificName( data ) {
+    data = data.response.taxon.ScientificName;
+    data = data.replace(/\s*\(.*?\)\s*/g, "")
+    
+
+    return data;
+
+}
+
+
+// Returns: ['Goldfish', 'Prussian carp', ...]
+export function CommonNames(data) {
+  const names = data?.response?.taxon?.commonName || [];
+  const arr = Array.isArray(names) ? names : [names];
+
+  return arr
+    .filter(item => item 
+      && item['#text'] 
+      && item['@{http://www.w3.org/XML/1998/namespace}lang'] === 'en'
+    )
+    .map(item => item['#text']);
+}
+
+// Returns: "Animalia" (or whatever is present)
+export function Kingdom(data) {
+  return data?.response?.taxon?.Kingdom || '';
+}
+
+// Returns: "Chordata" (or whatever is present)
+export function Phylum(data) {
+  return data?.response?.taxon?.Phylum || '';
+}
+
+// Returns: "Teleostei" (or whatever is present)
+export function Class(data) {
+  return data?.response?.taxon?.Class || '';
+}
+
+// Returns: "Cypriniformes" (or whatever is present)
+export function Order(data) {
+  return data?.response?.taxon?.Order || '';
+}
+
+// Returns: "Cyprinidae" (or whatever is present)
+export function Family(data) {
+  return data?.response?.taxon?.Family || '';
+}
+
+// Returns: "Carassius" (or whatever is present)
+export function Genus(data) {
+  return data?.response?.taxon?.Genus || '';
+}
+
+// Returns the main biology/general description text if available
+export function Description(data) {
+  const objects = data?.response?.taxon?.dataObject || [];
+  // Filter text-type data objects
+  const textObjects = objects.filter(
+    obj => obj.dataType === 'http://purl.org/dc/dcmitype/Text'
+  );
+
+  // Try to find biology/general description by identifier
+  const biology = textObjects.find(
+    obj => obj.identifier?.includes('FB-GeneralDescr')
+  );
+
+  // Fallback: take the first available text object if none matched
+  return (
+    biology?.description || textObjects[0]?.description || ''
+  );
+}
+
+// Returns: ["https://...", "https://...", ...]
+export function AllImages(data) {
+  const objects = data?.response?.taxon?.dataObject || [];
+  return objects
+    .filter(obj => obj.dataType === 'http://purl.org/dc/dcmitype/StillImage' && obj.mediaURL)
+    .map(obj => obj.mediaURL);
+}
+
+// Returns: array of distribution sentences like ["Europe and Asia", "Introduced to other regions", ...]
+export function Distribution(data) {
+  const objects = data?.response?.taxon?.dataObject || [];
+
+  // Filter text-type objects only
+  const textObjects = objects.filter(
+    obj => obj.dataType === 'http://purl.org/dc/dcmitype/Text'
+  );
+
+  // Look for distribution information
+  const distributionObj = textObjects.find(
+    obj => obj.identifier?.includes('FB-Distribution')
+  );
+
+  const distributionText = distributionObj?.description || '';
+
+  // Split by "." and remove empty strings/extra spaces
+  return distributionText
+    .split('.')
+    .map(sentence => sentence.trim())
+    .filter(sentence => sentence.length > 0);
+}
+
+// Returns: { habitat: ["benthopelagic", "freshwater", ...], migration: "Potamodromous. Migrates within rivers..." }
+export function HabitatAndMigration(data) {
+  const objects = data?.response?.taxon?.dataObject || [];
+
+  // Filter text-type objects only
+  const textObjects = objects.filter(
+    obj => obj.dataType === 'http://purl.org/dc/dcmitype/Text'
+  );
+
+  // Find habitat and migration descriptions
+  const habitatObj = textObjects.find(
+    obj => obj.identifier?.includes('FB-Habitat')
+  );
+  const migrationObj = textObjects.find(
+    obj => obj.identifier?.includes('FB-Migration')
+  );
+
+  // Habitat text clean-up: remove parentheses and split by ";"
+  const habitatText = habitatObj?.description || '';
+  const habitatCleaned = habitatText
+    // remove text inside parentheses along with parentheses
+    .replace(/\(.*?\)/g, '')
+    // split by ";" and clean up whitespace
+    .split(';')
+    .map(item => item.trim())
+    // remove empty strings
+    .filter(Boolean);
+
+  // Migration text (if available)
+  const migration = migrationObj?.description || '';
+
+  return { habitat: habitatCleaned, migration };
+}
+
+
+
+export function LifeCycleAndSize(data) {
+  const objects = data?.response?.taxon?.dataObject || [];
+
+  
+  const textObjects = objects.filter(
+    obj => obj.dataType === "http://purl.org/dc/dcmitype/Text"
+  );
+
+  
+  const lifeCycleObj = textObjects.find(
+    obj => obj.identifier?.includes("FB-LifeCycle")
+  );
+  const sizeObj = textObjects.find(
+    obj => obj.identifier?.includes("FB-Size")
+  );
+
+ 
+  let lifeCycleText = lifeCycleObj?.description?.trim() || "";
+  let sizeText = sizeObj?.description?.trim() || "";
+
+  
+  const lifeCycle = lifeCycleText
+    .replace(/\(Ref.*?\)/g, "")
+    .replace(/\s*\(\s*\)\s*/g, "") 
+    .split(".") 
+    .map(item => item.trim())
+    .filter(Boolean);
+
+  
+  const size = sizeText
+    .replace(/\(Ref.*?\)/g, "")
+    .replace(/\s*\(\s*\)\s*/g, "")
+    .split(";")
+    .map(item => item.trim())
+    .filter(Boolean);
+
+  return {
+    lifeCycle,
+    size
+  };
+}
+
+// Returns: ["Fisheries: Commercial", "Gamefish: Yes", "Aquarium: Commercial"]
+export function getUses(data) {
+  const objects = data?.response?.taxon?.dataObject || [];
+
+  // Filter text-type objects
+  const textObjects = objects.filter(
+    obj => obj.dataType === "http://purl.org/dc/dcmitype/Text"
+  );
+
+  // Find the "Uses" section by its identifier
+  const usesObj = textObjects.find(
+    obj => obj.identifier?.includes("FB-Uses")
+  );
+
+  // Extract and clean up text
+  const usesText = usesObj?.description?.trim() || "";
+
+  // Split by ";" and filter out blank entries
+  const uses = usesText
+    .split(";")
+    .map(item => item.trim())
+    .filter(Boolean);
+
+  return uses;
+}
+
+// Returns example: 
+// { threats: ["Least Concern (LC)", "Overfishing"], diseases: [["Black Spot Disease", "Parasitic infestations (protozoa, worms, etc.)"], ["Fish Lice", "Crustacean parasitic infection"]] }
+
+export function getThreatsAndDiseases(data) {
+  const objects = data?.response?.taxon?.dataObject || [];
+
+  // Filter for text-type objects
+  const textObjects = objects.filter(
+    obj => obj.dataType === "http://purl.org/dc/dcmitype/Text"
+  );
+
+  // Identify threat and disease sections
+  const threatObj = textObjects.find(
+    obj => obj.identifier?.includes("FB-Threats")
+  );
+  const diseaseObj = textObjects.find(
+    obj => obj.identifier?.includes("FB-Diseases")
+  );
+
+  // Threats: split by comma and clean
+  const threatsText = threatObj?.description?.trim() || "";
+  const threats = threatsText
+    .split(",")
+    .map(item => item.trim())
+    .filter(Boolean);
+
+  // Diseases: split into pairs like [name, description]
+  const diseasesText = diseaseObj?.description?.trim() || "";
+  const diseasesRaw = diseasesText
+    .split(/\d+\.\s*/) // split at "1. ", "2. ", etc.
+    .map(item => item.trim())
+    .filter(Boolean);
+
+  // For each entry, separate name & cause
+  const diseases = diseasesRaw.map(entry => {
+    const match = entry.match(/^(.*?)\s+(Parasitic infestations.*)$/i);
+    if (match) return [match[1].trim(), match[2].trim()];
+    return [entry]; // fallback in case no split pattern matches
+  });
+
+  return { threats, diseases };
+}
+
+
+
+
+
+
+
