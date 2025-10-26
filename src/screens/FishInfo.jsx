@@ -2,12 +2,12 @@ import React from 'react'
 import ModelViewer from '../components/ModelViewer'
 import { useLocation } from 'react-router-dom'
 export default function FishInfo() {
-    const location = useLocation();
-    const data = location.state?.data;
-    console.log("Found data fishinfo:", data);
-
+  const location = useLocation();
+  const data = location.state?.data;
+  console.log("Found data fishinfo:", data);
+  
    
-    
+ 
       
 
   return (
@@ -26,18 +26,19 @@ export default function FishInfo() {
                 {/* //scientific name */}
                 <div>
                     <div className='flex gap-2 items-baseline'>
-                        <p className='text-3xl font-bold'>{data.Sname}|</p>
-                         <p className='text-3xl font-bold opacity-11'>Common name</p>
+                        <p className='text-3xl font-bold capitalize'>{data.Sname}|</p>
+                         <p className='text-3xl font-bold opacity-11 capitalize'>Common name</p>
                     </div>
-                    <p className='opacity-12 text-xl'>{data.Kdom} → {data.Plum} → {data.Cl} → {data.Or} → {data.Fam} → {data.Gen} → {data.Sname}</p>
+                    <p className='opacity-12 text-xl capitalize'>{data.Kdom} → {data.Plum} → {data.Cl} → {data.Or} → {data.Fam} → {data.Gen} → {data.Sname}</p>
                 </div>
                 {/* //general desc */}
                 <div>
                     <p className='py-5 text-2xl font-bold'>General Desc</p>
-
-                    <p className='text-justify  max-w-xl'>
-                       {data.Desc}
+ 
+                    <p className="text-justify max-w-xl break-words whitespace-normal leading-relaxed capitalize">
+                        {data.Desc}
                     </p>
+
                 </div>
            </div>
         </div>
@@ -47,11 +48,12 @@ export default function FishInfo() {
             {/* //Distribution */}
             <div className='max-w-lg'>
                 <p className='font-semibold text-xl'>Distribution</p>
-                <ul>
+                <ul className="max-w-xl whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
                     {data.Dist?.map((item, index) => (
-                        <li key={index}>{'\u2022'} {item}</li>
+                        <li key={index}>{item}</li>
                     ))}
                 </ul>
+
 
                 
             </div>
@@ -60,14 +62,17 @@ export default function FishInfo() {
             <div className='max-w-lg'>
                 <p className='font-semibold text-xl '>Habitat/Migration</p>
                     {/* Habitat as a bulleted list */}
-                    <ul>
-                    {data.HandM.habitat.map((item, index) => (
-                        <li key={index}>{'\u2022'} {item}</li>
-                    ))}
+                    <div className="max-w-xl whitespace-normal break-words leading-relaxed">
+                    <ul className="list-disc ml-5 space-y-1 capitalize">
+                        {data.HandM.habitat?.map((item, index) => (
+                        <li key={index}>{item}</li>
+                        ))}
                     </ul>
 
                     {/* Migration as a single string */}
-                    <p>{'\u2022'}{data.HandM.migration}</p>
+                    <p className="mt-2 capitalize">{'\u2022'} {data.HandM.migration}</p>
+            </div>
+
 
             </div>
 
@@ -79,27 +84,30 @@ export default function FishInfo() {
             <div>
                 <p className='font-semibold text-xl'>Life Cycle | Size</p>
 
-                <ul>
+                <ul className="max-w-[600px] whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
                     {data.LCS.lifeCycle?.map((item, index) => (
-                    <li key={index}>{'\u2022'} {item}</li>
+                        <li key={index}>{item}</li>
                     ))}
                 </ul>
 
-                <ul>
+
+                <ul className="max-w-xl whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
                     {data.LCS.size?.map((item, index) => (
-                    <li key={index}>{'\u2022'} {item}</li>
+                        <li key={index}>{item}</li>
                     ))}
                 </ul>
+
             </div>
 
             {/* //Uses */}
             <div>
                 <p className='font-semibold text-xl'>Uses</p>
-                <ul>
+                <ul className="max-w-xl whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
                     {data.using?.map((item, index) => (
-                    <li key={index}>{'\u2022'} {item}</li>
+                        <li key={index}>{item}</li>
                     ))}
                 </ul>
+
             </div>
 
         </div>
@@ -109,17 +117,19 @@ export default function FishInfo() {
             <div>
                 <p className='font-semibold text-xl'>Threats | Diseases</p>
                 
-                <ul>
+                <ul className="max-w-xl whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
                     {data.tad.diseases?.map((item, index) => (
-                    <li key={index}>{'\u2022'} {item}</li>
+                        <li key={index}>{item}</li>
                     ))}
                 </ul>
 
-                 <ul>
+
+                <ul className="max-w-xl whitespace-normal break-words leading-relaxed list-disc ml-5 space-y-1 capitalize">
                     {data.tad.threats?.map((item, index) => (
-                    <li key={index}>{'\u2022'} {item}</li>
+                        <li key={index}>{item}</li>
                     ))}
                 </ul>
+
             </div>
 
             <div></div>
