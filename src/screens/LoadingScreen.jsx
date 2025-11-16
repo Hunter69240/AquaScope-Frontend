@@ -18,7 +18,8 @@ import {
   getUses,
   getThreatsAndDiseases,
   getIdentifier,
-  getAllThumbnails
+  getAllThumbnails,
+  getThreeDStatusStatus
 } from "../components/DataCleaning/DataCleaners";
 
 
@@ -77,7 +78,8 @@ export default function LoadingScreen() {
           LifeCycleAndSize: getLifeCycleAndSize(rawData),
           Uses: getUses(rawData),
           ThreatsAndDiseases: getThreatsAndDiseases(rawData),
-		  Thumbnails: getAllThumbnails(rawData),
+		      Thumbnails: getAllThumbnails(rawData),
+          ThreeDStatus: getThreeDStatusStatus(rawData),
         };
 
         // Delay navigation slightly for smoother UX

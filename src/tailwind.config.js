@@ -7,10 +7,8 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        'custom-gradient':
-          'linear-gradient(90deg, rgba(213, 242, 251, 1) 0%, rgba(247, 248, 255, 1) 100%)',
+        'custom-gradient': 'radial-gradient(circle at center, #B3E5FC 0%, #fff 100%)',
       },
-
       keyframes: {
         'spin-smooth': {
           '100%': { transform: 'rotate(360deg)' },

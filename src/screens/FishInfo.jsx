@@ -1,21 +1,43 @@
 import React from 'react'
 import ModelViewer from '../components/ModelViewer'
-import { useLocation } from 'react-router-dom'
+import { useLocation,useNavigate  } from 'react-router-dom'
 export default function FishInfo() {
   const location = useLocation();
   const data = location.state?.data;
   console.log("Found data fishinfo:", data);
+  const navigation = useNavigate ();
   
 
   return (
     <div>
+        
+            <button
+        className="
+            mt-7
+            ml-7
+            px-5 py-2
+            rounded-full
+            font-semibold
+            text-white
+            bg-gradient-to-r from-[#039BE5] via-[#4DD0E1] to-[#B3E5FC]
+            shadow-lg
+            hover:from-[#0288D1] hover:via-[#00B8D4] hover:to-[#80DEEA]
+            transition-all
+            duration-200
+            border-none
+            outline-none
+        "
+            onClick={() => navigation('/')}
+        >
+        Back
+        </button>
 
         {/* //3d model of fish + scientific name */}
         <div className='flex flex-col md:flex-row gap-15 p-10'>
             {/* //3d model */}
            <div>    
                 
-                <ModelViewer data={data.Images} thumbnail={data.Thumbnails}/>
+                <ModelViewer data={data.Images} thumbnail={data.Thumbnails}  status={data.ThreeDStatus}/>
                 {/* <img src="/Mock-Model.png" alt="3D Model of Fish" /> */}
            </div>
 

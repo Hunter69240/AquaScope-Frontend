@@ -1,13 +1,21 @@
 import React from "react";
 
-export function getScientificName( data ) {
-    data = data.response.taxon.ScientificName;
-    data = data.replace(/\s*\(.*?\)\s*/g, "")
-    
+export function getScientificName(data) {
+  // Access scientific name
+  data = data.response.taxon.ScientificName;
 
-    return data;
+  // 1. Remove parentheses and their content
+  data = data.replace(/\s*\(.*?\)\s*/g, "");
 
+  // 2. Remove numbers and special characters, keeping only letters and spaces
+  data = data.replace(/[^a-zA-Z\s]/g, "");
+
+  // 3. Clean up extra spaces
+  data = data.trim().replace(/\s+/g, " ");
+
+  return data;
 }
+
 
 export function getIdentifier(data) { 
     return data.response.taxon.identifier;
@@ -301,6 +309,10 @@ export function getThreatsAndDiseases(data) {
   });
 
   return { threats, diseases };
+}
+
+export function getThreeDStatusStatus(apiResponse) {
+  return apiResponse?.threedstatus?.status ?? null;
 }
 
 
