@@ -1,8 +1,8 @@
-# Fish Encyclopedia - Interactive 3D Fish Information System
+# AquaScope - Interactive 3D Fish Information System
 
 ## 📖 Project Overview
 
-**Fish Encyclopedia** is an interactive web application that provides comprehensive information about various fish species from around the world. The platform combines rich biological data with stunning 3D models, offering users an immersive educational experience about aquatic life.
+**AquaScope** is an interactive web application that provides comprehensive information about various fish species from around the world. The platform combines rich biological data with stunning 3D models, offering users an immersive educational experience about aquatic life.
 
 Users can search for any fish species and instantly access detailed taxonomic information, habitat data, life cycle details, conservation status, and interactive 3D visualizations—all in one seamless interface.
 
