@@ -34,13 +34,13 @@ export default function LoadingScreen() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Validation error coming from SearchBar
+    // ❌ Validation error coming from SearchBar
     if (hasError) {
       setError(errorMessage || "Invalid fish name");
       return;
     }
 
-    // Safety check (direct URL access)
+    // ❌ Safety check (direct URL access)
     if (!fishName) {
       setError("No fish name provided");
       return;
@@ -71,7 +71,7 @@ export default function LoadingScreen() {
 
         const rawData = await response.json();
 
-        //  No valid fish data
+        // ❌ No valid fish data
         if (!rawData?.response?.taxon) {
           throw new Error("Fish species not found. Please try another name.");
         }
@@ -97,7 +97,7 @@ export default function LoadingScreen() {
           ThreeDStatus: getThreeDStatusStatus(rawData),
         };
 
-        //  Navigate to Fish Info page
+        // ✅ Navigate to Fish Info page
         setTimeout(() => {
           navigate("/fishinfo", {
             state: {
@@ -131,7 +131,7 @@ export default function LoadingScreen() {
     fetchFishData();
   }, [fishName, hasError, errorMessage, navigate]);
 
-  //  Error UI
+  // ❌ Error UI
   if (error) {
     return (
       <div
@@ -166,7 +166,7 @@ export default function LoadingScreen() {
     );
   }
 
-  //  Loader UI
+  // ✅ Loader UI
   return (
     <div className="relative w-full h-screen overflow-hidden">
       <video

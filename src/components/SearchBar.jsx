@@ -5,16 +5,31 @@ export default function SearchBar() {
   const [typed, Settyped] = useState("");
   const navigate = useNavigate();
 
-  //  SIMPLE & CLEAN VALIDATION
-  const isValid =
-    typed.trim().length > 2 &&
-    /^[a-zA-Z\s]+$/.test(typed.trim());
-
   const handleSearch = () => {
-    if (!isValid) return;
+    const trimmedSearch = typed.trim();
+
+    let error = false;
+    let errorMessage = "";
+
+    // ❌ Empty or too short
+    if (!trimmedSearch || trimmedSearch.length <= 2) {
+      error = true;
+      errorMessage = "Invalid fish name. Please enter at least 2 characters.";
+    }
+
+    // ❌ Special characters
+    const validNameRegex = /^[a-zA-Z\s]+$/;
+    if (!error && !validNameRegex.test(trimmedSearch)) {
+      error = true;
+      errorMessage = "Invalid fish name. Only letters and spaces are allowed.";
+    }
 
     navigate("/loading", {
-      state: { fishName: typed.trim() },
+      state: {
+        fishName: trimmedSearch,
+        error,
+        errorMessage,
+      },
     });
   };
 
@@ -27,19 +42,11 @@ export default function SearchBar() {
         value={typed}
         onChange={(e) => Settyped(e.target.value)}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && isValid) {
-            handleSearch();
-          }
+          if (e.key === "Enter") handleSearch();
         }}
       />
-
       <button
-        className={`rounded-full px-8 py-2 font-medium shadow transition
-          ${isValid
-            ? "bg-black text-white hover:bg-gray-900"
-            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          }`}
-        disabled={!isValid}
+        className="bg-black text-white rounded-full px-8 py-2 font-medium shadow hover:bg-gray-900 transition"
         onClick={handleSearch}
       >
         Search
