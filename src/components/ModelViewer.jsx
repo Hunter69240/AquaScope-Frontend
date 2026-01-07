@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 
 const ModelViewer = ({ data, thumbnail, status, isReady }) => {
+  
   const images = data;
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Remove the page refresh logic completely
+  
   // The parent component (FishInfo) handles polling now
 
   return (
